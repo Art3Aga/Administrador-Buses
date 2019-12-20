@@ -1,0 +1,58 @@
+<mat-sidenav-container fullscreen>
+  <mat-sidenav  #sidenav mode="side" class="app-sidenav">
+    <mat-toolbar  class="toolbar" color="primary">
+      <span class="toolbar-filler">{{usuario ? usuario.usuario : ''}}</span>
+      <button mat-icon-button (click)="sidenav.toggle()" class="mat-icon-button sidenav-toggle-button" [hidden]="!sidenav.opened">
+        <mat-icon aria-label="Menu" class="material-icons">menu</mat-icon>
+      </button>
+    </mat-toolbar>
+    <mat-nav-list>
+      <!--(click)="sidenav.toggle()"  evento al dar click-->
+      <a mat-list-item (click)="getTitulo('1- Rutas')" class="sidenav-link" [routerLink]="['/rutas']"
+          matTooltip="Agregar Datos de una Ruta (Costo Pasaje, Horarios, Foto, etc)" matTooltipPosition="right">
+        <mat-icon mat-list-icon>directions_bus</mat-icon>
+        <span class="title" mat-line>1- Rutas</span>
+        <!--<span mat-line class="secondary">Guardar Rutas, Precio, Horarios</span>-->
+      </a>
+      <!--(click)="sidenav.toggle()"  evento al dar click-->
+      <a mat-list-item (click)="getTitulo('2- Relacionar Bus a una Ruta')" class="sidenav-link" [routerLink]="['/buses']"
+          matTooltip="Crear y Agregar Buses a una Ruta Seleccionada" matTooltipPosition="right">
+        <mat-icon mat-list-icon>compare_arrows</mat-icon>
+        <span class="title" mat-line>2- Relacionar Bus a Ruta</span>
+        <!--<span mat-line class="secondary">test</span>-->
+      </a>
+      <!--(click)="sidenav.toggle()"  evento al dar click-->
+      <a mat-list-item (click)="getTitulo('3- Crear Recorrido')" class="sidenav-link" [routerLink]="['/recorridos']"
+          matTooltip="Crear un Recorrido en el Mapa para una Ruta y sus Buses" matTooltipPosition="right">
+        <mat-icon mat-list-icon>navigation</mat-icon>
+        <span class="title" mat-line >3- Crear Recorrido</span>
+        <!--<span mat-line class="secondary">test</span>-->
+      </a>
+      <a mat-list-item (click)="getTitulo('Bitácora')" class="sidenav-link" [routerLink]="['/bitacora']"
+          matTooltip="Ver Todos los Registros de Actividad en el Sistema" matTooltipPosition="right">
+        <mat-icon mat-list-icon>menu_book</mat-icon>
+        <span class="title" mat-line >Bitácora</span>
+        <!--<span mat-line class="secondary">test</span>-->
+      </a>
+      <a mat-list-item (click)="getTitulo('Comentarios')" class="sidenav-link" [routerLink]="['/comentarios']"
+          matTooltip="Ver Comentarios y Sugerencias de los Usuarios de la Aplicacion Movil" matTooltipPosition="right">
+        <mat-icon mat-list-icon>mode_comment</mat-icon>
+        <span class="title" mat-line>Comentarios</span>
+        <!--<span mat-line class="secondary">test</span>-->
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-toolbar id="appToolbar" [ngClass]="{'toolbar-fullscreen': (fullscreen$ | async)}" color="primary">
+    <button mat-icon-button (click)="sidenav.toggle()" class="mat-icon-button sidenav-toggle-button" [hidden]="sidenav.opened">
+      <mat-icon aria-label="Menu" class="material-icons" id="menuicon">menu</mat-icon>
+    </button>
+    <h1 class="component-title">
+      <a class="title-link">{{title}}</a>
+    </h1>
+    <span class="toolbar-filler"></span>
+    <!--<button id="button-login" md-button [routerLink]="['/signupin']" *ngIf="!(user | async)">Log In</button>-->
+    <button id="button-logout" mat-flat-button (click)="CerrarSesion()">Salir</button>
+  </mat-toolbar>
+  <router-outlet></router-outlet>
+</mat-sidenav-container>
+

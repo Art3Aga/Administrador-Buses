@@ -1,0 +1,20 @@
+.container{
+  position: absolute;
+	/*nos posicionamos en el centro del navegador*/
+	top:50%;
+	left:50%;
+	/*determinamos una anchura*/
+	width: 400px;
+	/*indicamos que el margen izquierdo, es la mitad de la anchura*/
+	margin-left: -200px;
+	/*determinamos una altura*/
+	height: 300px;
+	/*indicamos que el margen superior, es la mitad de la altura*/
+	margin-top: -150px;
+	padding:5px;
+}
+p {
+  font-size: 50px;
+  font-weight: bold;
+  color: white;
+}

@@ -1,0 +1,122 @@
+<div class="container">
+  <h1 *ngIf="RutaSeleccionada['IsEdit']">Editando: {{RutaSeleccionada['RutaSeleccionada'].nombre_ruta}}</h1>
+  <h1 *ngIf="!RutaSeleccionada['IsEdit']">{{RutaSeleccionada['RutaSeleccionada'].nombre_ruta}}</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <span class="titulo-span">Datos de {{RutaSeleccionada['RutaSeleccionada'].nombre_ruta}}</span><br><br>
+      <mat-form-field appearance="outline">
+          <mat-label>Nombre Ruta</mat-label>
+          <input disabled [(ngModel)]="RutaSeleccionada['RutaSeleccionada'].nombre_ruta" matInput placeholder="Ruta">
+          <mat-icon matSuffix>directions_bus</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+          <mat-label>Alias</mat-label>
+          <input [disabled]="!RutaSeleccionada['IsEdit']" [(ngModel)]="RutaSeleccionada['RutaSeleccionada'].nombre_abreviado" matInput placeholder="Alias">
+          <mat-icon matSuffix>directions_bus</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+          <mat-label>Precio Pasaje</mat-label>
+          <input [disabled]="!RutaSeleccionada['IsEdit']" [(ngModel)]="RutaSeleccionada['RutaSeleccionada'].precio" type="number" matInput placeholder="Coste Pasaje">
+          <mat-icon matSuffix>attach_money</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+          <mat-label>Cantidad de Buses</mat-label>
+          <input [disabled]="!RutaSeleccionada['IsEdit']" type="number" [(ngModel)]="RutaSeleccionada['RutaSeleccionada'].unidades" matInput placeholder="Placa">
+          <mat-icon matSuffix>money</mat-icon>
+      </mat-form-field>
+      <div class="imagenBusModal">
+        <img src="{{crud.URL_IMG}}/{{imgAnterior}}" *ngIf="!IsChange"  alt="">
+        <img src="{{crud.URL_IMG}}/{{RutaSeleccionada['RutaSeleccionada'].imgPath}}" *ngIf="IsChange"  alt="">
+      </div>
+      <div class="row">
+          <div class="col-md-6">
+            <input class="imgInput" (change)="seleccionarImagen($event)"
+                  type="file" placeholder="Foto Bus" #imgInput *ngIf="RutaSeleccionada['IsEdit']">
+            <button mat-raised-button [disabled]="!rutamodel.getImgSeleccionada" *ngIf="RutaSeleccionada['IsEdit']"  (click)="rutamodel.SubirImagen()">ReSubir Imagen</button>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <span class="titulo-span">Datos de Horarios Inicio - Fin:</span><br><br>
+        <mat-form-field appearance="outline">
+            <mat-label>Inicio Recorrido</mat-label>
+            <input [disabled]="!RutaSeleccionada['IsEdit']" [(ngModel)]="RutaSeleccionada['RutaSeleccionada'].hora_inicio" matInput placeholder="Inicio">
+            <mat-icon matSuffix>timer</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Fin Recorrido</mat-label>
+            <input [disabled]="!RutaSeleccionada['IsEdit']" [(ngModel)]="RutaSeleccionada['RutaSeleccionada'].hora_final" matInput placeholder="Fin">
+            <mat-icon matSuffix>timer_off</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Fecha de Creación</mat-label>
+            <input disabled [(ngModel)]="RutaSeleccionada['RutaSeleccionada'].fecha_creacion" matInput placeholder="Fin">
+            <mat-icon matSuffix>access_time</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Última Actualización</mat-label>
+            <input disabled [(ngModel)]="RutaSeleccionada['RutaSeleccionada'].fecha_actualizacion" matInput placeholder="Fin">
+            <mat-icon matSuffix>update</mat-icon>
+        </mat-form-field>
+        <div class="row">
+          <div class="col-md-6">
+            <button mat-raised-button (click)="dialogRef.close()"  *ngIf="RutaSeleccionada['IsEdit']">Cancelar</button>
+          </div>
+          <div class="col-md-6">
+            <button mat-raised-button class="btn-si" *ngIf="RutaSeleccionada['IsEdit']"  (click)="ActualizarRuta()">Guardar Cambios</button>
+          </div>
+        </div><br>
+        <p class="titulo-span">Recorrido que Realiza la {{RutaSeleccionada['RutaSeleccionada'].nombre_ruta}}</p>
+        <div class="recorrido-class">
+          <mat-action-list class="listBuses" *ngFor="let parada of paradasModel.getListaParadasPorRuta; let i = index">
+            <mat-list-item class="item-titulo" (click)="verMarcadorParada(parada.longitud, parada.latitud)">
+              {{parada.nombre_parada}}
+            </mat-list-item>
+            <mat-accordion displayMode="default" [multi]="true" *ngFor="let buses of busesModel.getListaHorarios;"
+            [hideToggle]="false">
+              <mat-expansion-panel [hideToggle]="false">
+                <mat-expansion-panel-header>{{buses.nombre_bus}}</mat-expansion-panel-header>
+                  <!--<mat-action-list class="listBuses" *ngFor="let horarios of busesModel.getListaHorarios; let i = index">
+                    <div class="item-subtitle" mat-list-item>
+                      <div class="ida">
+                        <p>Ida: </p>
+                        <p class="titleContent">{{horarios.horario_ida}}</p>
+                      </div>
+                      <div class="regreso">
+                        <p>Regreso: </p>
+                        <p class="titleContent">{{horarios.horario_regreso}}</p>
+                      </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                  </mat-action-list>-->
+              </mat-expansion-panel>
+            </mat-accordion>
+            <!--<mat-action-list class="listBuses" *ngFor="let buses of busesModel.getListaBusesPorRuta; let i = index">
+              <mat-list-item>{{buses.nombre_bus}}</mat-list-item>
+              <mat-action-list class="listBuses" *ngFor="let horarios of busesModel.getListaHorarios; let i = index">
+                <div class="item-subtitle" mat-list-item>
+                  <div class="ida">
+                    <p>Ida: </p>
+                    <p class="titleContent">{{horarios.horario_ida}}</p>
+                  </div>
+                  <div class="regreso">
+                    <p>Regreso: </p>
+                    <p class="titleContent">{{horarios.horario_regreso}}</p>
+                  </div>
+                </div>
+                <mat-divider></mat-divider>
+              </mat-action-list>
+            </mat-action-list>-->
+            <mat-divider></mat-divider>
+          </mat-action-list>
+        </div>
+    </div>
+  </div>
+  <br>
+  <div class="row" id="rowMapa">
+    <div class="col-md-12">
+      <div id="map"></div>
+    </div>
+  </div>
+</div>
+

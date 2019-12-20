@@ -1,0 +1,21 @@
+
+    <!--Input de Busqueda-->
+    <div class="container" id="container-busqueda">
+      <!--<mat-form-field appearance="outline" class="field-busqueda">
+        <mat-label>Buscar Ruta por Nombre</mat-label>
+        <input (keyup)="rutamodel.BuscarRutaPorNombre($event)" matInput type="text" placeholder="Nombre de Ruta" [(ngModel)]="rutamodel.setBusqueda">
+        <mat-icon matSuffix>directions_bus</mat-icon>
+      </mat-form-field>-->
+    </div>
+    <div class="container">
+      <mat-accordion class="lista">
+        <mat-expansion-panel *ngFor="let registro of bitacoraModel.getListaRegistrosBitacora" >
+          <mat-expansion-panel-header >
+            <mat-panel-title>{{registro.titulo}}</mat-panel-title>
+            <mat-panel-description>{{registro.fecha.split('-')[0] | date}} a las {{registro.fecha.split('-')[1]}}</mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>{{registro.mensaje}}</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+

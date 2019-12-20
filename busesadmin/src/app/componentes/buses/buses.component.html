@@ -1,0 +1,149 @@
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">directions_bus</mat-icon>
+      Listado de Buses
+    </ng-template>
+    <!--Input de Busqueda-->
+    <div class="container" id="container-busqueda">
+      <mat-form-field appearance="outline" class="field-busqueda" *ngIf="!tipoBusqueda.value">
+        <mat-label>Buscar Bus por Nombre</mat-label>
+        <input (keyup)="busesModel.BuscarBusPorNombre($event)" matInput type="text" placeholder="Nombre de Bus" [(ngModel)]="busesModel.setBusqueda">
+        <mat-icon matSuffix>directions_bus</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="field-busqueda" *ngIf="tipoBusqueda.value == 'Ruta'">
+        <mat-label>Buscar Bus Por Ruta:</mat-label>
+        <mat-select [(value)]="busesModel.setBusqueda" (selectionChange)="busesModel.BuscarBusPorRuta($event)">
+          <mat-option *ngFor="let ruta of rutaModel.getListaRutas" [value]="ruta.nombre_ruta">
+            {{ruta.nombre_ruta}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="field-busqueda" *ngIf="tipoBusqueda.value == 'Bus'">
+        <mat-label>Buscar Bus por Nombre</mat-label>
+        <input (keyup)="busesModel.BuscarBusPorNombre($event)" matInput type="text" placeholder="Nombre de Bus" [(ngModel)]="busesModel.setBusqueda">
+        <mat-icon matSuffix>directions_bus</mat-icon>
+      </mat-form-field>
+      <!--<mat-form-field appearance="outline" class="field-busqueda" *ngIf="tipoBusqueda.value == 'Ruta'">
+        <mat-label>Buscar Bus por Nombre de Ruta</mat-label>
+        <input (keyup)="busesModel.BuscarBusPorRuta($event)" matInput type="text" placeholder="Nombre de Bus" [(ngModel)]="busesModel.setBusqueda">
+        <mat-icon matSuffix>directions_bus</mat-icon>
+      </mat-form-field>-->
+      <mat-button-toggle-group #tipoBusqueda="matButtonToggleGroup" name="search" aria-label="Tipo de Busqueda">
+        <mat-button-toggle value="Bus" matTooltip="Buscar Bus por Nombre" matTooltipPosition="below">
+          <mat-icon>subway</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="Ruta" matTooltip="Buscar Bus por Nombre de Ruta" matTooltipPosition="below">
+          <mat-icon>directions_bus</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div class="container">
+      <mat-accordion class="lista">
+        <mat-expansion-panel *ngFor="let bus of busesModel.getListaBuses; let i = index;">
+          <mat-expansion-panel-header >
+            <mat-panel-title>{{bus.nombre_bus}}</mat-panel-title>
+            <mat-panel-description>{{bus.nombre_motorista}}</mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-form-field>
+              <input matInput [(ngModel)]="bus.nombre_motorista" placeholder="Motorista" disabled>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [(ngModel)]="bus.placa" placeholder="Placa" disabled>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [(ngModel)]="bus.nombre_bus" placeholder="Bus" disabled>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [(ngModel)]="bus.nombre_ruta" placeholder="Ruta" disabled>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput [(ngModel)]="bus.fecha_creacion" placeholder="Fecha Creacion" disabled>
+            </mat-form-field>
+            <div class="imagenBusModal">
+              <img src="{{crud.URL_IMG}}/{{bus.imgPath}}">
+            </div>
+            <!--<button mat-raised-button (click)="editarBus()">{{textoHabilitar}}</button>
+            <button *ngIf="habilitarEdit"
+              (click)="updateBus(bus.id_bus, bus.nombre_bus, bus.nombre_motorista, bus.placa)"
+              mat-raised-button>
+              Guardar Cambios
+            </button>-->
+          <button mat-raised-button class="btn-ver" (click)="AbrirModal(bus, bus.nombre_bus)">
+              Borrar
+          </button>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">add_circle</mat-icon>
+      Crear Nuevo Bus
+    </ng-template>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12" id="inputRuta">
+          <mat-form-field appearance="outline">
+            <mat-label>Asociar Nuevo Bus a la Ruta:</mat-label>
+            <mat-select [(value)]="busesModel.DatosBuses.id_ruta">
+              <mat-option *ngFor="let ruta of rutaModel.getListaRutas" value="{{ruta.id_ruta}}-{{ruta.nombre_ruta}}">
+                {{ruta.nombre_ruta}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!--<p *ngIf="busesModel.DatosBuses.id_ruta" >{{busesModel.DatosBuses.id_ruta.split('-')[1]}}</p>-->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre del Bus</mat-label>
+            <input [disabled]="!busesModel.DatosBuses.id_ruta" matInput type="text" placeholder="Nombre de Bus" [(ngModel)]="busesModel.DatosBuses.nombre_bus">
+            <mat-icon matSuffix>directions_bus</mat-icon>
+            <mat-hint>Ejemplo: 'La Beatriz Ortega'</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre del Motorista</mat-label>
+            <input [disabled]="!busesModel.DatosBuses.id_ruta" matInput type="text" placeholder="Nombre de Motorista" [(ngModel)]="busesModel.DatosBuses.nombre_motorista">
+            <mat-icon matSuffix>supervised_user_circle</mat-icon>
+            <mat-hint>Ejemplo: Juan Perez</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Placa</mat-label>
+            <input [disabled]="!busesModel.DatosBuses.id_ruta" matInput type="text" placeholder="N° de Placa" [(ngModel)]="busesModel.DatosBuses.placa">
+            <mat-icon matSuffix>money</mat-icon>
+            <mat-hint>Ejemplo: MB 503-305</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <input [disabled]="!busesModel.DatosBuses.id_ruta"
+          type="file" placeholder="Foto del Bus"
+          (change)="busesModel.seleccionarImagen($event)" #imgInput>
+          <button class="btn-ver" [disabled]="!busesModel.getImgSeleccionada" mat-raised-button (click)="busesModel.SubirImagen()">Subir Imagen</button>
+        </div>
+      </div><br><br><br><br><br>
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <button mat-raised-button class="btn-ver"
+                (click)="AgregarBus()"
+                *ngIf="busesModel.DatosBuses.nombre_bus.length > 0 &&
+                busesModel.DatosBuses.nombre_motorista.length > 0 &&
+                busesModel.DatosBuses.placa.length > 0 && busesModel.DatosBuses.id_ruta.length > 0">
+            Guardar Bus
+          </button>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

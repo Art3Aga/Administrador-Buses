@@ -1,0 +1,39 @@
+<div class="menu" *ngIf="storageService.getSiguientePagina" >
+  <app-menu></app-menu>
+</div>
+<div class="login" *ngIf="!storageService.getSiguientePagina" >
+  <div class="container">
+      <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+              <div class="formulario">
+                <div class="titulo">
+                  <p>Sistema Administración Buses</p>
+                </div>
+                <div class="inputs">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Usuario</mat-label>
+                    <input [formControl]="usuario" class="inputLogin" required type="text" matInput placeholder="Ingrese su Usuario">
+                    <mat-error *ngIf="usuario.invalid">{{usuario.hasError('required') ? 'Usuario Requerido' : 'Usuario Requerido'}}</mat-error>
+                    <mat-icon matSuffix>person_pin</mat-icon>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Clave</mat-label>
+                    <input [formControl]="clave" required class="inputLogin" matInput placeholder="Ingrese su Clave" [type]="!hide ? 'password' : 'text'">
+                    <mat-error *ngIf="clave.invalid">{{clave.hasError('required') ? 'Clave Requerida' : 'Clave Requerida'}}</mat-error>
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                      <mat-icon>{{!hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    </mat-form-field>
+                  <div class="boton">
+                    <button mat-raised-button class="btn-ver" (click)="Login()">
+                      Iniciar Sesion
+                    </button>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-md-3"></div>
+        </div>
+  </div>
+</div>

@@ -1,0 +1,129 @@
+<div class="container">
+  <div class="row" id="row-nombre-recorrido">
+    <div class="col-md-6">
+      <mat-form-field appearance="outline" class="field-busqueda">
+        <mat-label>Seleccione Ruta:</mat-label>
+        <mat-select [(value)]="busesModel.setBusqueda" (selectionChange)="busesModel.BuscarBusPorRuta2($event)">
+          <mat-option *ngFor="let ruta of rutaModel.getListaRutas" value="{{ruta.nombre_ruta}}-{{ruta.id_ruta}}">
+            {{ruta.nombre_ruta}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-button-toggle-group #tipoParada="matButtonToggleGroup" name="search" aria-label="Tipo de Busqueda">
+        <mat-button-toggle   value="Nueva" matTooltip="Crear Nuevas Paradas" matTooltipPosition="below">
+          <mat-icon>navigation</mat-icon>
+          <mat-label>Nuevas Paradas</mat-label>
+        </mat-button-toggle>
+        <mat-button-toggle  value="Cargar" matTooltip="Cargar Paradas" matTooltipPosition="below">
+          <mat-icon>my_location</mat-icon>
+          <mat-label>Cargar Paradas</mat-label>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+  <div class="row" id="rowMapa">
+    <div class="col-md-6">
+      <div id="mapa-mapbox"></div>
+      <pre id='coordinates' class='coordinates'></pre>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12"><p class="tituloSection">Parada:</p></div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field *ngIf="!tipoParada.value"  appearance="outline">
+            <mat-label>Nombre de Parada</mat-label>
+            <input [(ngModel)]="paradaModel.DatosParada.nombre_parada" [disabled]="!busesModel.getBusqueda" matInput placeholder="Parada">
+            <mat-icon matSuffix>directions_bus</mat-icon>
+          </mat-form-field>
+          <mat-form-field *ngIf="tipoParada.value == 'Nueva'"  appearance="outline">
+            <mat-label>Nombre de Parada</mat-label>
+            <input [(ngModel)]="paradaModel.DatosParada.nombre_parada" [disabled]="!busesModel.getBusqueda" matInput placeholder="Parada">
+            <mat-icon matSuffix>directions_bus</mat-icon>
+          </mat-form-field>
+          <mat-form-field *ngIf="tipoParada.value == 'Cargar'"  appearance="outline">
+            <mat-label>Parada</mat-label>
+            <mat-select [disabled]="!busesModel.getBusqueda" [(value)]="paradaModel.setBusqueda"
+            (selectionChange)="crearMarcador2($event)">
+              <mat-option *ngFor="let parada of paradaModel.getListaParadas" value="{{parada.nombre_parada}},{{parada.longitud}},{{parada.latitud}}">
+                {{parada.nombre_parada}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!--<p *ngIf="paradaModel.DatosParada.namelnglat" >{{paradaModel.DatosParada.namelnglat.split(',')[1]}} {{paradaModel.DatosParada.namelnglat.split(',')[2]}}</p>-->
+        </div>
+        <div class="col-md-6">
+          <div class="buttonMarjer" *ngIf="tipoParada.value == 'Nueva' || !tipoParada.value" >
+            <button class="btn-ver" mat-raised-button
+                  (click)="crearMarcador()"
+                  [disabled]="!busesModel.getBusqueda">
+            Agregar Marcador
+          </button>
+          </div>
+          <button mat-raised-button *ngIf="paradaModel.getBusqueda || paradaModel.getBusqueda == null" (click)="LimpiarDatos()">Cancelar</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12"><p class="tituloSection">Buses:</p></div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Bus</mat-label>
+            <mat-select [(value)]="busesModel.DatosBuses.id_bus" [disabled]="!busesModel.getBusqueda">
+              <mat-option [value]="bus.id_bus" *ngFor="let bus of busesModel.getListaBuses" >
+                {{bus.nombre_bus}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Vueltas por Día</mat-label>
+            <input [(ngModel)]="vueltas" min="0" max="15" type="number"
+             matInput placeholder="Vueltas" [disabled]="!busesModel.getBusqueda">
+            <mat-icon matSuffix>autorenew</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12"><p class="tituloSection">Horarios:</p></div>
+      </div>
+      <div class="row" *ngIf="vueltas > 0">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Ida</mat-label>
+            <input type="time" [(ngModel)]="recorridoModel.DatosRecorrido.horario_ida" matInput placeholder="Hora Ida">
+            <mat-icon matSuffix>alarm_on</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Regreso</mat-label>
+            <input type="time" [(ngModel)]="recorridoModel.DatosRecorrido.horario_regreso" matInput placeholder="Hora Regreso">
+            <mat-icon matSuffix>alarm_on</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row" *ngIf="vueltas > 0">
+        <div class="col-md-12">
+          <button *ngIf="contador < vueltas" mat-raised-button (click)="SiguienteVuelta()" >
+            Vuelta: {{contador + 1 }}
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <button class="btn-ver" [disabled]="!busesModel.getBusqueda || vueltas == 0"
+                  (click)="Guardar()"
+                  mat-raised-button>Guardar Parada</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+

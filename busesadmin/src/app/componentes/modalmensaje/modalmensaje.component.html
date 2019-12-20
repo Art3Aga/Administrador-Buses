@@ -1,0 +1,13 @@
+<div class="container">
+  <p>¿Seguro que Desea Borrar "{{RutaSeleccionada.nombre_ruta}}"?</p>
+  <span>Todos los datos se borrarán del sistema administrativo como para los usuarios de la aplicación</span>
+  <br><br><br>
+  <div class="row">
+    <div class="col-md-6">
+      <button mat-raised-button (click)="dialogRef.close()">No</button>
+    </div>
+    <div class="col-md-6">
+      <button mat-raised-button class="btn-si" (click)="Delete()" >Si</button>
+    </div>
+  </div>
+</div>

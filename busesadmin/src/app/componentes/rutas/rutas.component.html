@@ -1,0 +1,126 @@
+<mat-tab-group [color]="color" [backgroundColor]="background">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">directions_bus</mat-icon>
+      Listado de Rutas
+    </ng-template>
+    <!--Input de Busqueda-->
+    <div class="container" id="container-busqueda">
+      <mat-form-field appearance="outline" class="field-busqueda">
+        <mat-label>Buscar Ruta por Nombre</mat-label>
+        <input (keyup)="rutamodel.BuscarRutaPorNombre($event)" matInput type="text" placeholder="Nombre de Ruta" [(ngModel)]="rutamodel.setBusqueda">
+        <mat-icon matSuffix>directions_bus</mat-icon>
+      </mat-form-field>
+    </div>
+    <div class="container">
+      <mat-accordion class="lista" >
+        <mat-expansion-panel *ngFor="let ruta of rutamodel.getListaRutas">
+          <mat-expansion-panel-header >
+            <mat-panel-title>{{ruta.nombre_ruta}}</mat-panel-title>
+            <mat-panel-description>{{ruta.nombre_abreviado}}</mat-panel-description>
+          </mat-expansion-panel-header>
+          <button mat-raised-button class="btn-ver" (click)="accionesService.OpenModal(ruta, false, false)">Ver</button>
+          <button mat-raised-button class="btn-ver" (click)="accionesService.OpenModal(ruta, true, false)">Editar</button>
+          <button mat-raised-button class="btn-ver" (click)="accionesService.OpenModal(ruta, false, true)">Borrar</button>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">add_circle</mat-icon>
+      Crear Nueva Ruta
+    </ng-template>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <p class="tituloDatos">Datos de Ruta:</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre Ruta</mat-label>
+            <input [(ngModel)]="rutamodel.DatosRuta.nombre_ruta" matInput placeholder="Ruta">
+            <mat-icon matSuffix>directions_bus</mat-icon>
+            <mat-hint>Ejemplo: Ruta 2</mat-hint>
+          </mat-form-field>
+          <br><br>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Alias</mat-label>
+            <input [(ngModel)]="rutamodel.DatosRuta.nombre_abreviado" matInput placeholder="Alias">
+            <mat-icon matSuffix>directions_bus</mat-icon>
+            <mat-hint>Ejemplo: 'La 2'</mat-hint>
+          </mat-form-field>
+          <br><br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <p class="tituloDatos">Datos de Horarios Inicio - Fin:</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Inicio Recorrido</mat-label>
+            <input [(ngModel)]="rutamodel.DatosRuta.hora_inicio" type="time" matInput placeholder="Inicio">
+            <mat-icon matSuffix>timer</mat-icon>
+            <mat-hint>Ejemplo: 06:00 AM</mat-hint>
+          </mat-form-field>
+          <br><br>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Fin Recorrido</mat-label>
+            <input [(ngModel)]="rutamodel.DatosRuta.hora_final" type="time" matInput placeholder="Fin">
+            <mat-icon matSuffix>timer_off</mat-icon>
+            <mat-hint>Ejemplo: 06:30 PM</mat-hint>
+          </mat-form-field>
+          <br><br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <p class="tituloDatos">Datos de Caracteristicos:</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Precio Pasaje</mat-label>
+            <input [(ngModel)]="rutamodel.DatosRuta.precio" type="number" matInput placeholder="Coste Pasaje">
+            <mat-icon matSuffix>attach_money</mat-icon>
+            <mat-hint>Ejemplo: 0.25</mat-hint>
+          </mat-form-field>
+          <br><br>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field appearance="outline">
+            <mat-label>Cantidad de Buses</mat-label>
+            <input [(ngModel)]="rutamodel.DatosRuta.unidades" type="number" matInput placeholder="Unidades">
+            <mat-icon matSuffix>money</mat-icon>
+            <mat-hint>Ejemplo: 15</mat-hint>
+          </mat-form-field>
+          <br><br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <input class="imgInput" (change)="rutamodel.seleccionarImagen($event)" type="file" placeholder="Foto Bus" #imgInput>
+          <button class="btn-ver" [disabled]="!rutamodel.getImgSeleccionada" mat-raised-button (click)="rutamodel.SubirImagen()">Subir Imagen</button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn-ver" mat-raised-button (click)="AgregarRuta()">
+            Guardar Ruta
+          </button>
+        </div>
+      </div>
+      <br><br><br><br>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+

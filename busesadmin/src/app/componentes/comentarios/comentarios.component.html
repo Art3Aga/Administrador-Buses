@@ -1,0 +1,61 @@
+<div class="container">
+  <mat-form-field appearance="outline" *ngIf="!tipoBusqueda.value"  class="example-form-field">
+  <mat-label>Buscar Comentario por Nombre Usuario</mat-label>
+    <input (keyup)="comentariomodel.BuscarComentariosPorUsuario($event)" matInput type="text" placeholder="Buscar Comentario" [(ngModel)]="comentariomodel.setBusqueda">
+    <mat-icon matSuffix>directions_bus</mat-icon>
+  </mat-form-field>
+  <mat-form-field appearance="outline" *ngIf="tipoBusqueda.value == 'Nombre'" class="example-form-field">
+  <mat-label>Buscar Comentario por Nombre Usuario</mat-label>
+    <input (keyup)="comentariomodel.BuscarComentariosPorUsuario($event)" matInput type="text" placeholder="Buscar Comentario" [(ngModel)]="comentariomodel.setBusqueda">
+    <mat-icon matSuffix>directions_bus</mat-icon>
+  </mat-form-field>
+  <mat-form-field appearance="outline" *ngIf="tipoBusqueda.value == 'Texto'" class="example-form-field">
+    <mat-label>Buscar Texto en un Comentario</mat-label>
+    <input (keyup)="comentariomodel.BuscarComentariosPorTexto($event)" matInput type="text" placeholder="Buscar Comentario" [(ngModel)]="comentariomodel.setBusqueda">
+    <mat-icon matSuffix>directions_bus</mat-icon>
+  </mat-form-field>
+  <mat-form-field appearance="outline" *ngIf="tipoBusqueda.value == 'Fecha'" class="example-form-field">
+    <mat-label>Buscar Comentario por Fecha</mat-label>
+    <input matInput (dateChange)="comentariomodel.BuscarComentarioPorFecha($event)" [matDatepicker]="picker"
+          placeholder="Buscar Comentario"  [(ngModel)]="comentariomodel.setBusqueda">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker touchUi #picker></mat-datepicker>
+  </mat-form-field>
+  <!--Seccion de opciones para afectar la busqueda-->
+  <button mat-icon-button aria-label="Recargar Lista de Comentarios"
+      matTooltip="Recargar para ver nuevos comentarios" matTooltipPosition="above" (click)="comentariomodel.MostrarListaComentarios()" >
+    <mat-icon>refresh</mat-icon>
+  </button>
+  <mat-button-toggle-group #tipoBusqueda="matButtonToggleGroup" name="search" aria-label="Tipo de Busqueda">
+    <mat-button-toggle value="Nombre" matTooltip="Buscar Comentario por Nombre de Usuario" matTooltipPosition="below">
+      <mat-icon>person</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="Texto" matTooltip="Buscar Comentario por Texto" matTooltipPosition="below">
+      <mat-icon>message</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="Fecha" matTooltip="Buscar Comentario por Fecha" matTooltipPosition="below">
+      <mat-icon>calendar_today</mat-icon>
+    </mat-button-toggle>
+    <!--<button mat-icon-button (click)="picker.open()" >
+      <mat-icon>calendar_today</mat-icon>
+    </button>-->
+  </mat-button-toggle-group>
+  <!--Lista de Comentarios-->
+  <mat-list *ngFor="let coment of comentariomodel.getListaComentarios">
+    <mat-card class="example-card"  >
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+          <mat-card-title>{{coment.nombre_usuario}}</mat-card-title>
+          <mat-card-subtitle>{{coment.fecha.split(' ')[0] | date}} a las {{coment.fecha.split(' ')[1]}}</mat-card-subtitle>
+      </mat-card-header>
+      <!--<img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">-->
+      <mat-card-content>
+        <p>{{coment.texto}}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>BORRAR</button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-list>
+</div>
+

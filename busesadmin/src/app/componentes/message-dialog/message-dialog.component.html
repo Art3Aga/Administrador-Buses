@@ -1,0 +1,20 @@
+<div class="container">
+    <p>{{Objeto.titulo}}</p>
+    <span>{{Objeto.mensaje}}</span>
+    <br><br><br>
+    <div *ngIf="Objeto.IsDelete"  class="row">
+      <div class="col-md-6">
+        <button mat-raised-button (click)="dialogRef.close()">No</button>
+      </div>
+      <div class="col-md-6">
+        <button mat-raised-button class="btn-si" (click)="Accion()">Si</button>
+      </div>
+    </div>
+    <div class="row" *ngIf="!Objeto.IsDelete" >
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <button mat-raised-button (click)="dialogRef.close()">OK</button>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </div>

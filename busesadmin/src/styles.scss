@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and also import other style files */
+/*html, body{
+  width: 100%;
+  height: 100%;
+}*/
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.btn-ver{
+  background-color: #e91e63;
+}
+.errorMsm{
+  background: #CC0000 !important;
+  color: white !important;
+}
+.niceMsm{
+  //background: #2BBBAD !important;
+  background:  #e91e63 !important;
+  color: white !important;
+}
+.btn-si{
+  background: white !important;
+  color: black !important;
+}
+.example-form-field {
+  width: 465px;
+}
+.inputLogin{
+  color: white !important;
+}
+.imagenBusModal{
+  width: 260px;
+  height: 210px;
+}
+.imagenBusModal > img{
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
